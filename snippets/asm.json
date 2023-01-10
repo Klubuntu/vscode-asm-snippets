@@ -1,0 +1,429 @@
+{
+	/* Nasm x16/x86/x64 Assembly Snippets (Intel syntax) */
+	/* Author: Klubuntu */
+	/*	Source: https://github.com/vscode-asm-snippets */
+	/* Version: 1.0 */
+	/* Release: (assembly commands + info esp/gpr) */
+
+	// Data Movement Instructions
+	"mov": {
+		"prefix": "mov",
+		"body": [
+			"mov"
+		],
+		"description": [
+			"Move (Opcodes)\n",
+			"(The mov instruction copies the data item referred to by its second operand (i.e. register contents, memory contents, or a constant value) into the location referred to by its first operand (i.e. a register or memory). While register-to-register moves are possible, direct memory-to-memory moves are not. In cases where memory transfers are desired, the source memory contents must first be loaded into a register, then can be stored to the destination memory address.)",
+			"\nmov <reg>,<reg>\nmov <reg>,<mem>\nmov <mem>,<reg>",
+			"mov <reg>,<const>\nmov <mem>,<const>\n",
+			"Examples:\n"
+		]
+	},
+	"mov_part2": {
+		"prefix": "mov_part2",
+		"body": [
+			"mov eax, [ebx]  ; Move the 4 bytes in memory at the address contained in EBX into EAX\nmov [var], ebx  ; Move the contents of EBX into the 4 bytes at memory address var. (Warning, var is a 32-bit constant)",
+			"mov eax, [esi-4]  ; Move 4 bytes at memory address ESI + (-4) into EAX\nmov [esi+eax], cl  ; Move the contents of CL into the byte at address ESI+EAX",
+			"mov edx, [esi+4*ebx]  ; Move the 4 bytes of data at address ESI+4*EBX into EDX"
+		],
+		"description": [
+			"Move (Extend Opcodes)\n",
+			"(The mov instruction copies the data item referred to by its second operand (i.e. register contents, memory contents, or a constant value) into the location referred to by its first operand (i.e. a register or memory). While register-to-register moves are possible, direct memory-to-memory moves are not. In cases where memory transfers are desired, the source memory contents must first be loaded into a register, then can be stored to the destination memory address.)",
+			"\nExamples:\n",
+		]
+	},
+	"mov_invalid": {
+		"prefix": "mov_invalid",
+		"body": [
+			"mov eax, [ebx-ecx]  ; Can only add register values",
+			"mov [eax+esi+edi], ebx  ; At most 2 registers in address computation"
+		],
+		"description": [
+			"Move (Invalid Opcodes)\n",
+			"(The mov instruction copies the data item referred to by its second operand (i.e. register contents, memory contents, or a constant value) into the location referred to by its first operand (i.e. a register or memory). While register-to-register moves are possible, direct memory-to-memory moves are not. In cases where memory transfers are desired, the source memory contents must first be loaded into a register, then can be stored to the destination memory address.)",
+			"\nExamples:\n",
+		]
+	},
+	"push": {
+		"prefix": "push",
+		"body": [
+			"push"
+		],
+		"description": [
+			"Push stack",
+			"(The push instruction places its operand onto the top of the hardware supported stack in memory. Specifically, push first decrements ESP by 4, then places its operand into the contents of the 32-bit location at address [ESP]. ESP (the stack pointer) is decremented by push since the x86 stack grows down - i.e. the stack grows from high addresses to lower addresses)",
+			"push <reg32>",
+			"push <mem>",
+			"push <con32>",
+			"\nExamples:\npush eax — push eax on the stack\npush [var] — push the 4 bytes at address var onto the stack"
+		]
+	},
+	"pop": {
+		"prefix": "pop",
+		"body": [
+			"pop"
+		],
+		"description": [
+			"Pop stack",
+			"(The pop instruction removes the 4-byte data element from the top of the hardware-supported stack into the specified operand (i.e. register or memory location). It first moves the 4 bytes located at memory location [SP] into the specified register or memory location, and then increments SP by 4)",
+			"pop <reg32>",
+			"pop <mem>",
+			"\nExamples:\npop edi — pop the top element of the stack into EDI\npop [ebx] — pop the top element of the stack into memory at the four bytes starting at location EBX"
+		]
+	},
+	"lea": {
+		"prefix": "lea",
+		"body": [
+			"lea"
+		],
+		"description": [
+			"Load effective address",
+			"(The lea instruction places the address specified by its second operand into the register specified by its first operand. Note, the contents of the memory location are not loaded, only the effective address is computed and placed into the register. This is useful for obtaining a pointer into a memory region)",
+			"lea <reg32>,<mem>",
+			"\nExamples:\nlea edi, [ebx+4*esi] — the quantity EBX+4*ESI is placed in EDI.\nlea eax, [var] — the value in var is placed in EAX\nlea eax, [val] — the value val is placed in EAX"
+		]
+	},
+
+	// Arithmetic Instructions
+	"add": {
+		"prefix": "add",
+		"body": [
+			"add"
+		],
+		"description": [
+			"Integer Addition (add <reg>,<reg>; add <reg>,<mem>)",
+			"\nExamples\nadd eax, 10 — EAX ← EAX + 10\nadd BYTE PTR [var], 10 — add 10 to the single byte stored at memory address var"
+		]
+	},
+	"sub": {
+		"prefix": "sub",
+		"body": [
+			"sub"
+		],
+		"description": [
+			"Integer Subtraction (sub <reg32>,<mem>)",
+			"\nExamples\nsub al, ah — AL ← AL - AH\nsub eax, 216 — subtract 216 from the value stored in EAX"
+		]
+	},
+	"inc": {
+		"prefix": "inc",
+		"body": [
+			"inc"
+		],
+		"description": "Increment (inc <reg> <mem>)"
+	},
+	"dec": {
+		"prefix": "dec",
+		"body": [
+			"dec"
+		],
+		"description": "Decrement (dec <reg> <mem>)"
+	},
+	"idiv": {
+		"prefix": "idiv",
+		"body": [
+			"idiv"
+		],
+		"description": "Integer Division (idiv <reg32> <mem>)"
+	},
+
+	// Logical Instructions
+	"and": {
+		"prefix": "and",
+		"body": [
+			"and"
+		],
+		"description": [
+			"Logical and",
+			"and <reg>,<reg>\nand <reg>,<mem>\nand <mem>,<reg>",
+			"and <reg>,<con>\nand <mem>,<con>",
+			"\nExamples",
+			"and eax, 0fH — clear all but the last 4 bits of EAX.",
+			"and edx, edx — set the contents of EDX to zero."
+		]
+	},
+	"or": {
+		"prefix": "or",
+		"body": [
+			"or"
+		],
+		"description": [
+			"Logical or",
+			"or <reg>,<reg>\nor <reg>,<mem>\nor <mem>,<reg>",
+			"or <reg>,<con>\nor <mem>,<con>",
+			"\nExamples",
+			"or eax, 0fH — clear all but the last 4 bits of EAX.",
+			"or edx, edx — set the contents of EDX to zero."
+		]
+	},
+	"xor": {
+		"prefix": "xor",
+		"body": [
+			"xor"
+		],
+		"description": [
+			"Logical xor",
+			"xor <reg>,<reg>\nxor <reg>,<mem>\nxor <mem>,<reg>",
+			"or <reg>,<con>\nxor <mem>,<con>",
+			"\nExamples",
+			"xor eax, 0fH — clear all but the last 4 bits of EAX.",
+			"xor edx, edx — set the contents of EDX to zero."
+		]
+	},
+	"not": {
+		"prefix": "not",
+		"body": [
+			"not"
+		],
+		"description": [
+			"Logical Not",
+			"not <reg>\nnot <mem>",
+			"\nExample",
+			"not BYTE PTR [var] — negate all bits in the byte at the memory location var."
+		]
+	},
+	"neg": {
+		"prefix": "neg",
+		"body": [
+			"neg"
+		],
+		"description": [
+			"Negate",
+			"neg <reg>\nneg <mem>",
+			"\nExample",
+			"neg eax — EAX → - EAX"
+		]
+	},
+	"shl": {
+		"prefix": "shl",
+		"body": [
+			"shl"
+		],
+		"description": [
+			"Shift Left",
+			"(These instructions shift the bits in their first operand's contents left, padding the resulting empty bit positions with zeros. The shifted operand can be shifted up to 31 places. The number of bits to shift is specified by the second operand, which can be either an 8-bit constant or the register CL. In either case, shifts counts of greater then 31 are performed modulo 32.)",
+			"shl <reg>,<con8>\nshl <mem>,<con8>",
+			"shl <reg>,<cl>\nshl <mem>,<cl>",
+			"\nExample",
+			"shl eax, 1 — Multiply the value of EAX by 2 (if the most significant bit is 0)"
+		]
+	},
+	"shr": {
+		"prefix": "shr",
+		"body": [
+			"shr"
+		],
+		"description": [
+			"Shift Right",
+			"(These instructions shift the bits in their first operand's contents right, padding the resulting empty bit positions with zeros. The shifted operand can be shifted up to 31 places. The number of bits to shift is specified by the second operand, which can be either an 8-bit constant or the register CL. In either case, shifts counts of greater then 31 are performed modulo 32.)",
+			"shr <reg>,<con8>\nshr <mem>,<con8>",
+			"shr <reg>,<cl>\nshr <mem>,<cl>",
+			"\nExample",
+			"shr ebx, cl — Store in EBX the floor of result of dividing the value of EBX by 2n wheren is the value in CL"
+		]
+	},
+
+	// Control Flow Instructions
+	"label": {
+		"prefix": "label",
+		"body": [
+			"label:",
+			"mov esi, [ebp+8]"
+		],
+		"description": [
+			"Set Label",
+			"(Set Label for Jump)",
+			"\nExample",
+			"name: - set label [name]"
+		]
+	},
+	"jmp": {
+		"prefix": "jmp",
+		"body": [
+			"jmp"
+		],
+		"description": [
+			"jmp — Jump",
+			"(Transfers program control flow to the instruction at the memory location indicated by the operand.)",
+			"jmp <label>",
+			"\nExample",
+			"jmp begin — Jump to the instruction labeled begin."
+		]
+	},
+	"je": {
+		"prefix": "je",
+		"body": [
+			"je"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when equal)",
+			"je <label>",
+			"\nExample",
+			"cmp eax, ebx\nje done — Jump to the instruction labeled done."
+		]
+	},
+	"jne": {
+		"prefix": "jne",
+		"body": [
+			"jne"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when not equal)",
+			"je <label>",
+			"\nExample",
+			"cmp eax, ebx\nje done — Jump to the instruction labeled done."
+		]
+	},
+	"jz": {
+		"prefix": "jz",
+		"body": [
+			"jz"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when last result was zero)",
+			"jz <label>",
+			"\nExample",
+			"cmp eax, ebx\njz done — Jump to the instruction labeled done."
+		]
+	},
+	"jg": {
+		"prefix": "jg",
+		"body": [
+			"jg"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when greater than)",
+			"jg <label>",
+			"\nExample",
+			"cmp eax, ebx\nje done — Jump to the instruction labeled done."
+		]
+	},
+	"jge": {
+		"prefix": "je",
+		"body": [
+			"je"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when greater than or equal to)",
+			"jge <label>",
+			"\nExample",
+			"cmp eax, ebx\njge done — Jump to the instruction labeled done."
+		]
+	},
+	"jl": {
+		"prefix": "jl",
+		"body": [
+			"jl"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when greater than or equal to)",
+			"jl <label>",
+			"\nExample",
+			"cmp eax, ebx\njle done — Jump to the instruction labeled done."
+		]
+	},
+	"jle": {
+		"prefix": "jle",
+		"body": [
+			"jle"
+		],
+		"description": [
+			"jmp — Jump",
+			"(jump when greater than or equal to)",
+			"jle <label>",
+			"\nExample",
+			"cmp eax, ebx\njle done — Jump to the instruction labeled done."
+		]
+	},
+	"cmp": {
+		"prefix": "cmp",
+		"body": [
+			"cmp"
+		],
+		"description": [
+			"cmp — Compare",
+			"(Compare the values of the two specified operands, setting the condition codes in the machine status word appropriately. This instruction is equivalent to the sub instruction, except the result of the subtraction is discarded instead of replacing the first operand.)",
+			"cmp <reg>,<reg>\ncmp <reg>,<mem>",
+			"cmp <mem>,<reg>\ncmp <reg>,<con>",
+			"\nExample",
+			"cmp DWORD PTR [var], 10\njeq loop"
+		]
+	},
+	"call": {
+		"prefix": "call",
+		"body": [
+			"call"
+		],
+		"description": [
+			"call — Call to label",
+			"call <label>",
+		]
+	},
+	"call_c": {
+		"prefix": "call",
+		"body": [
+			"call _"
+		],
+		"description": [
+			"call — Call to function on c",
+			"call _<label>",
+		]
+	},
+	"ret": {
+		"prefix": "ret",
+		"body": [
+			"ret"
+		],
+		"description": [
+			"ret — Return from label",
+			"The ret instruction implements a subroutine return mechanism. This instruction first pops a code location off the hardware supported in-memory stack (see the pop instruction for details). It then performs an unconditional jump to the retrieved code location.",
+			"ret",
+		]
+	},
+
+
+	// Other Parameters
+	"instructions":{
+		"prefix": "instructions",
+		"body": [
+			"<reg32> Any 32-bit register (EAX, EBX, ECX, EDX, ESI, EDI, ESP, or EBP)",
+			"<reg16> Any 16-bit register (AX, BX, CX, or DX)",
+			"<reg8>  Any 8-bit register (AH, BH, CH, DH, AL, BL, CL, or DL)",
+			"<reg>   Any register",
+			"<mem>   A memory address (e.g., [eax], [var + 4], or dword ptr [eax+ebx])",
+			"<con32> Any 32-bit constant",
+			"<con16> Any 16-bit constant",
+			"<con8>  Any 8-bit constant",
+			"<con>   Any 8-, 16-, or 32-bit constant"
+		],
+		"description": "Intructions for assembly"
+	},
+	"esp_info":{
+		"prefix": "esp_info",
+		"body": "; See: http://www.c-jump.com/CIS77/ASM/Stack/S77_0040_esp_register.htm",
+		"description": "View info about ESP register"
+	},
+	"gpr_info":{
+		"prefix": "gpr_info",
+		"body": "; See: https://web.archive.org/web/20191114093028/https://gerardnico.com/computer/cpu/register/general",
+		"description": "View info about (CPU Register - General Purpose Register)"
+	},
+
+	// Snippets Source
+	"source_snippets":{
+		"prefix": "asm_snippets",
+		"body": "; Snippets source, website: https://www.cs.virginia.edu/~evans/cs216/guides/x86.html",
+		"description": "Check source information, instructions assembly"
+	},
+	"source_snippets2":{
+		"prefix": "source_asm_snippets",
+		"body": "; Snippets source, website: https://www.cs.virginia.edu/~evans/cs216/guides/x86.html",
+		"description": "Check source information, instructions assembly"
+	}
+}
