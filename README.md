@@ -11,7 +11,7 @@
   - On MacOS ``$HOME/Library/ApplicationSupport/Code/User/``
 3. Happy Coding 🎉
 
-# Other
+## Other
  - **⚠️ Installing this snippet, will replace your exists installed asm snippets**
  - **✅ Thanks for usage**
  - **🏁 If you have, finded bugs/idea, please report to Issues or create Pull Request**
