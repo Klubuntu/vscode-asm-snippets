@@ -5,7 +5,7 @@
 ## How to install
 0. Download zip file from [latest release](https://github.com/Klubuntu/vscode-asm-snippets/releases/latest)
 1. Extract zip
-2. Place folder on User Profile (**Code** directory)
+2. Place extracted folder on User Profile (**Code** directory)
   - On Windows ``%appdata%\Code\User``
   - On Linux ``$HOME/.config/Code/User/``
   - On MacOS ``$HOME/Library/ApplicationSupport/Code/User/``
